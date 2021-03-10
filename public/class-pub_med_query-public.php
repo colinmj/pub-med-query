@@ -106,10 +106,23 @@ class Pub_med_query_Public {
 
 
 		wp_localize_script( $this->plugin_name, 'values', array(
-			'api_key' => $options['api_key']
+			'api_key' => $options['api_key'],
+			'researchers' => $options['researchers'],
 		) );
-		
 
+
+	}
+
+
+	public function render_publications_container()
+	{
+		return require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/filter.php';
+	}
+
+
+	public function register_shortcodes()
+	{
+		add_shortcode('pub_med_query', array($this, 'render_publications_container'));
 	}
 
 }

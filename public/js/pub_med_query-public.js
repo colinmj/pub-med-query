@@ -29,7 +29,23 @@
 	 * practising this, we should strive to set a better example in our own work.
 	 */
 
-	 
+
+	 console.log(values);
+
+	 var url = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?&term=Qiu+Wansu%5BAuthor%5D&retmode=json';
+
+
+
+	 $.ajax({
+	 	url: url,
+	 	method: 'GET',
+	 	dataType: 'json',
+	 })
+	 .done(function(data){
+
+	 	console.log(data);
+
+	 });
 
 
 	})( jQuery );

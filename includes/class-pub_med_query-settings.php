@@ -59,6 +59,8 @@ class Pub_med_query_Settings{
 
 		add_settings_field( 'pmq_plugin_setting_api_key', 'API Key', array($this, 'pmq_plugin_setting_api_key' ), 'pub_med_query', 'api_settings' );
 
+		add_settings_field( 'pmq_plugin_setting_researchers', 'Researchers', array($this, 'pmq_plugin_setting_researchers' ), 'pub_med_query', 'api_settings' );
+
 		
 	}
 
@@ -84,6 +86,33 @@ class Pub_med_query_Settings{
 	}
 
 
+	public function pmq_plugin_setting_researchers() {
+		$options = get_option( 'pmq_example_plugin_options' );
+
+
+		$select = '<select id="pmq_researcher_select" name="pmq_example_plugin_options[researchers][]" multiple>';
+		$select .= '<option>Researchers</option>';
+
+		$researchers = get_posts(array('post_type' => 'researcher', 'numberposts' => -1));
+
+
+		//var_dump( $researchers );
+		foreach( $researchers as $researcher ) {
+
+			if( in_array( $researcher->post_name, $options['researchers'])) {
+				$selected = 'selected';
+			} else {
+				$selected = '';
+			}
+
+			$select .= '<option value="' . $researcher->post_name . '"'. $selected . '>' . $researcher->post_title . '</option>';
+		}
+
+		$select .= '</select>';
+		echo $select;
+
+
+	}
 
 
 }
