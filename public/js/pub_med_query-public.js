@@ -3,33 +3,56 @@
 
 	var apiKey = values.api_key;
 	var researchers = values.researchers;
+	
 
 
 	//only return initial results if user has entered api key and selected researchers
 	if (apiKey && researchers.length != 0) {
 
-		var urlBase = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi';
 
+		var count = 0;
+		var retstart = 0;
+		var retmax = 10;
+		var currentPage = 1;
+		var totalPages = 1;
+		var urlBase = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi';
 		var authorList = [];
+		var searchQuery;
+		var url;
+
 
 		researchers.forEach(function(researcher) {
 
 			var x = researcher.split('-').reverse().join('+');
-
 			authorList.push(x);
 
 		})
 
 		authorList = authorList.join('+');
-
-
-		var url = urlBase + '?&term=' + authorList + '%5BAuthor%5D&retmode=json';
+		searchQuery = authorList + '%5BAuthor%5D';
+		url = urlBase + '?&term=' + searchQuery + '&retmode=json';
 
 		//var url = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?&term=Qiu+Wansu+Galea+Lisa%5BAuthor%5D&retmode=json';
 
-		var count = 0;
-		var retstart = 0;
-		var retmax = 10;
+
+		//load initial results
+		pubMedQuery(url);
+
+
+
+
+
+
+	}//if api key && researchers
+
+
+
+
+
+
+
+	function pubMedQuery(url) {
+
 
 		$.ajax({
 			url: url,
@@ -42,9 +65,11 @@
 			var ids = data.esearchresult.idlist;
 
 			if (count > retmax) {
-				var button = document.getElementById('get-more');
-				totalPages = Math.ceil(count / retmax);
 
+				//come back to this--
+
+				var button = document.getElementById('load-more');
+				totalPages = Math.ceil(count / retmax);
 
 				if (totalPages > 1 && currentPage < totalPages ) {
 					button.classList.add('visible');
@@ -92,6 +117,31 @@
 	 	});
 
 	}
+
+
+
+
+
+	function handleClick (e) {
+		e.preventDefault();
+		currentPage ++;
+		retstart += retmax;
+
+		var nextPage = urlBase +  '?&term=' + searchQuery + '&retstart=' + retstart + '&retmode=json';
+
+		pubMedQuery(nextPage);
+	}
+
+
+
+
+	function filterPubMed(){
+
+		console.log('hello world');
+
+		return false;
+	}
+
 
 
 })( jQuery );
