@@ -108,6 +108,7 @@ class Pub_med_query_Public {
 		wp_localize_script( $this->plugin_name, 'values', array(
 			'api_key' => $options['api_key'],
 			'researchers' => $options['researchers'],
+			'categories' => $options['categories'],
 		) );
 
 

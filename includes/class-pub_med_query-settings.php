@@ -61,17 +61,12 @@ class Pub_med_query_Settings{
 
 		add_settings_field( 'pmq_plugin_setting_researchers', 'Researchers', array($this, 'pmq_plugin_setting_researchers' ), 'pub_med_query', 'api_settings' );
 
+		add_settings_field( 'pmq_plugin_setting_categories', 'Research Categories', array($this, 'pmq_plugin_setting_categories' ), 'pub_med_query', 'api_settings' );
+
 		
 	}
 
-	// public function pmq_example_plugin_options_validate( $input ) {
-	// 	$newinput['api_key'] = trim( $input['api_key'] );
-	// 	if ( ! preg_match( '/^[a-z0-9]{32}$/i', $newinput['api_key'] ) ) {
-	// 		$newinput['api_key'] = '';
-	// 	}
-
-	// 	return $newinput;
-	// }
+	
 
 
 	public function pmq_plugin_section_text() {
@@ -86,6 +81,14 @@ class Pub_med_query_Settings{
 	}
 
 
+	public function pmq_plugin_setting_categories() {
+		
+		$options = get_option( 'pmq_example_plugin_options' ); 
+
+		echo "<input id='pmq_plugin_setting_categories' name='pmq_example_plugin_options[categories]' type='text' value='" . esc_attr( $options['categories'] ) . "' />";
+	}
+
+
 	public function pmq_plugin_setting_researchers() {
 		$options = get_option( 'pmq_example_plugin_options' );
 
@@ -96,7 +99,7 @@ class Pub_med_query_Settings{
 		$researchers = get_posts(array('post_type' => 'researcher', 'numberposts' => -1));
 
 
-		//var_dump( $researchers );
+		
 		foreach( $researchers as $researcher ) {
 
 			if( in_array( $researcher->post_name, $options['researchers'])) {

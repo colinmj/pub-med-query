@@ -25,6 +25,8 @@ $query = new WP_Query( $args );
 				<?php endwhile; wp_reset_query(); ?>
 			</select>
 
+			
+
 
 
 			<a class="filter-articles" href="#">Filter</a>

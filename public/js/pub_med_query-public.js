@@ -1,8 +1,12 @@
-(function( $ ) {
-	'use strict';
+jQuery(function ($) {
+	
+
 
 	var apiKey = values.api_key;
 	var researchers = values.researchers;
+	var categories = values.categories;
+
+
 	
 
 
@@ -23,8 +27,9 @@
 
 		researchers.forEach(function(researcher) {
 
-			var x = researcher.split('-').reverse().join('+');
-			authorList.push(x);
+			var formattedResearcher = formatResearcher(researcher);
+
+			authorList.push(formattedResearcher);
 
 		})
 
@@ -32,7 +37,6 @@
 		searchQuery = authorList + '%5BAuthor%5D';
 		url = urlBase + '?&term=' + searchQuery + '&retmode=json';
 
-		//var url = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?&term=Qiu+Wansu+Galea+Lisa%5BAuthor%5D&retmode=json';
 
 
 		//load initial results
@@ -53,6 +57,7 @@
 
 	function pubMedQuery(url) {
 
+		console.log(url);
 
 		$.ajax({
 			url: url,
@@ -66,7 +71,7 @@
 
 			if (count > retmax) {
 
-				//come back to this--
+				
 
 				var button = document.getElementById('load-more');
 				totalPages = Math.ceil(count / retmax);
@@ -133,15 +138,48 @@
 	}
 
 
+	function formatResearcher(researcher) {
 
-
-	function filterPubMed(){
-
-		console.log('hello world');
-
-		return false;
+		return researcher.split('-').reverse().join('+');
 	}
 
 
 
-})( jQuery );
+
+	function filterPubMed(){
+
+		
+	}
+
+
+
+	$('.filter-articles').on('click', function(e){
+
+		var filterVal = $('#researcher-select').val();
+
+		if( filterVal == 'placeholder') {
+
+			alert('Please select at least one researcher');
+
+		} else {
+
+
+			var researcher = formatResearcher(filterVal);
+
+			searchQuery = researcher + '%5BAuthor%5D';
+			url = urlBase + '?&term=' + searchQuery + '&retmode=json';
+
+			$('#pub-med-container').empty();
+
+			pubMedQuery(url);
+
+		}
+		
+
+	})
+
+
+
+
+
+});
