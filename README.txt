@@ -15,7 +15,7 @@ As an alternative to having to manage publication content as WordPress post cont
 == Installation ==
 
 
-1. Upload `pub_med_query.php` to the `/wp-content/plugins/` directory
+1. Download the compressed plugin and upload to to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Control settings in the Pub Med page section
 4. Use shortcode [pub_med_query] on any page or post to display publications

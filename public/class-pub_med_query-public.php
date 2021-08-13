@@ -117,9 +117,11 @@ class Pub_med_query_Public {
 	}
 
 
-	public function render_publications_container()
+	public function render_publications_container($atts = array(), $content = null)
 	{
-		return require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/pubmed.php';
+
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/pubmed.php';
+
 	}
 
 

@@ -74,6 +74,8 @@ jQuery(function ($) {
 
 	function pubMedQuery(url) {
 
+		var button = document.getElementById('load-more');
+
 		$.ajax({
 			url: url,
 			method: 'GET',
@@ -81,15 +83,16 @@ jQuery(function ($) {
 		})
 		.then(function(data){
 
-
-
+			button.classList.remove('visible');
 			count = data.esearchresult.count;
 			var ids = data.esearchresult.idlist;
 
 			if (count > retmax) {
 
-				var button = document.getElementById('load-more');
+				
 				totalPages = Math.ceil(count / retmax);
+
+
 
 				if (totalPages > 1 && currentPage < totalPages ) {
 					button.classList.add('visible');
