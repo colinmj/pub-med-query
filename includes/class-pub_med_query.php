@@ -80,11 +80,6 @@ class Pub_med_query {
 		$this->set_locale();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
-
-
-
-		
-
 	}
 
 	/**
@@ -130,9 +125,6 @@ class Pub_med_query {
 
 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-pub_med_query-settings.php';
-
-
-
 
 
 		$this->loader = new Pub_med_query_Loader();

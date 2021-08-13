@@ -26,17 +26,40 @@ $query = new WP_Query( $args );
 			</select>
 
 			
+			<?php 
 
+
+			$options = get_option( 'pmq_options' );
+			$cats = explode(',', $options['categories']);
+
+
+			
+			if( $cats[0] != '' ) : ?>
+
+				<select name="categories" id="category-select">
+					<option value="placeholder">Select a Category</option>
+					<?php foreach( $cats as $cat) : 
+						$cat = trim($cat);
+
+						?>
+						<option value="<?php echo $cat ?>"><?php echo ucwords($cat) ?></option>
+					<?php endforeach; ?>
+				</select>
+
+			<?php endif; ?>
 
 
 			<a class="filter-articles" href="#">Filter</a>
-			
+
 
 		</div>
 
 		<div id="pub-med-container"></div>
 
-		<a class="" id="load-more" href="#">Load More</a>
+
+		<a class="load-more-button" id="load-more" href="#">Load More</a>
+
+
 
 	</section>
 

@@ -1,17 +1,16 @@
 jQuery(function ($) {
 	
-
-
-	var apiKey = values.api_key;
+	//var apiKey = values.api_key;
 	var researchers = values.researchers;
-	var categories = values.categories;
-
-
-	
+	var categories = values.categories.split(',');
+	var loadResults = values.load_results;
+	var noResultsMessage = values.no_results;
 
 
 	//only return initial results if user has entered api key and selected researchers
-	if (apiKey && researchers.length != 0) {
+	//add api key back in here
+
+	if (researchers.length != 0) {
 
 
 		var count = 0;
@@ -21,43 +20,59 @@ jQuery(function ($) {
 		var totalPages = 1;
 		var urlBase = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi';
 		var authorList = [];
+		var catList = [];
 		var searchQuery;
 		var url;
 
-
+		//push all researchers with formatted name to array
 		researchers.forEach(function(researcher) {
 
 			var formattedResearcher = formatResearcher(researcher);
 
 			authorList.push(formattedResearcher);
 
-		})
+		});
 
-		authorList = authorList.join('+');
-		searchQuery = authorList + '%5BAuthor%5D';
-		url = urlBase + '?&term=' + searchQuery + '&retmode=json';
+
+		//if categories have been selected, push those to array
+		if( categories.length != 0 ) {
+
+			categories.forEach(function(cat) {
+				catList.push(cat);
+			})
+		} 
+
+
+		//if the category array is an empty string, set value to an empty string so it doesn't interfere with the query
+		if( catList[0] == '') {
+			catList = '';
+		} else {
+			catList = catList.join('+') + '[All Fields]';
+		}
+		
+
+		authorList = authorList.join('+') + '[author]';
+		searchQuery = authorList + '+' + catList;
+		
+		//changing this to not load categories on initial results
+
+		url = urlBase + '?&term=' + authorList + '&retmode=json';
 
 
 
 		//load initial results
-		pubMedQuery(url);
 
+		if( loadResults ) {
 
+			pubMedQuery(url);
 
+		}
 
-
-
+		
 	}//if api key && researchers
 
 
-
-
-
-
-
 	function pubMedQuery(url) {
-
-		console.log(url);
 
 		$.ajax({
 			url: url,
@@ -66,12 +81,12 @@ jQuery(function ($) {
 		})
 		.then(function(data){
 
+
+
 			count = data.esearchresult.count;
 			var ids = data.esearchresult.idlist;
 
 			if (count > retmax) {
-
-				
 
 				var button = document.getElementById('load-more');
 				totalPages = Math.ceil(count / retmax);
@@ -103,23 +118,66 @@ jQuery(function ($) {
 
                             	data.result['uids'].forEach(function(uid){
 
-                            		var title = data.result[uid]['title'];
 
+
+                            		var title = data.result[uid]['title'];
+                            		var pubDate = data.result[uid]['pubdate'];
+                            		var journalName = data.result[uid]['fulljournalname'];
+                            		var authors = '';
+                            		var link = 'https://pubmed.ncbi.nlm.nih.gov/' + data.result[uid]['uid'];
+
+
+                            		data.result[uid]['authors'].forEach(function(author) {
+
+                            			displayAuthor = '<span>' + author.name + ', </span> ';
+                            			authors += displayAuthor;
+
+
+                            		})
+
+                            		
                             		
 
                             		$('#pub-med-container').append(
-                            			'<div class="pub-med-article"><h5>'
+
+                            			'<div class="pub-med-query--article"><h5>'
+                            			+ '<a target="_blank" href="'
+                            			+ link
+                            			+ '">'
                             			+ title
-                            			+ '</h5><div>'
+                            			+ '</a></h5>'
+                            			+ '<div class="pub-med-query--journal-authors">'
+                            			+ authors
+                            			+'</div>'
+                            			+ '<p class="pub-med-query--journal-name">'
+                            			+ journalName
+                            			+ '</p>'
+                            			+ '<p>'
+                            			+ pubDate
+                            			+ '</p>'
+                            			+ '</div>'
                             			);
 
                             	 })//foreach
                             	
                             });
 
-	 		}//if ids are present
+                        } else {
 
-	 	});
+                        	if( noResultsMessage != '' ) {
+
+                        		$('#pub-med-container').append(
+
+                        			'<div><h5>' + noResultsMessage + '</h5></div>'
+
+                        			);
+
+                        	}
+
+                        	
+                        }
+
+                    });
 
 	}
 
@@ -145,28 +203,31 @@ jQuery(function ($) {
 
 
 
-
-	function filterPubMed(){
-
-		
-	}
-
-
-
 	$('.filter-articles').on('click', function(e){
 
-		var filterVal = $('#researcher-select').val();
+		var researcherVal = $('#researcher-select').val();
 
-		if( filterVal == 'placeholder') {
+		if( researcherVal == 'placeholder') {
 
 			alert('Please select at least one researcher');
 
 		} else {
 
 
-			var researcher = formatResearcher(filterVal);
 
-			searchQuery = researcher + '%5BAuthor%5D';
+			var researcher = formatResearcher(researcherVal);
+			var categoryVal = $('#category-select').val();
+			var selectedDate;
+
+			
+
+			if( categoryVal == 'placeholder') {
+				catQuery = '';
+			} else {
+				catQuery = categoryVal + '[All Fields]';
+			}
+
+			searchQuery = researcher + '[author]' + '+' + catQuery;
 			url = urlBase + '?&term=' + searchQuery + '&retmode=json';
 
 			$('#pub-med-container').empty();

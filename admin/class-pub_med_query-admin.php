@@ -114,6 +114,9 @@ class Pub_med_query_Admin {
 				),
 				'public'      => true,
 				'has_archive' => true,
+				'show_in_rest' => true,
+				'supports' => array('title', 'editor', 'custom-fields', 'excerpt', 'thumbnail'),
+
 			)
 		);
 	}

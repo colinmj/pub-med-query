@@ -2,3 +2,14 @@
  * All of the CSS for your admin-specific functionality should be
  * included in this file.
  */
+
+
+ #pmq_researcher_select,
+ #pmq_plugin_setting_categories,
+ #pmq_plugin_setting_no_results {
+
+ 	max-width: 300px;
+ 	margin-top: 20px;
+ 	width: 100%;
+
+ }

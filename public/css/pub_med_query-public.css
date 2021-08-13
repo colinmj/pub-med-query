@@ -2,3 +2,52 @@
  * All of the CSS for your public-facing functionality should be
  * included in this file.
  */
+
+ .pub-med-query--article *:not(span) {
+ 	padding-bottom: 10px;
+ }
+
+ .pub-med-filter {
+ 	padding-bottom: 20px;
+ }
+
+ .pub-med-query--article {
+ 	border-bottom: 1px solid #000000;
+ 	padding-bottom: 10px;
+ 	margin-bottom: 30px;
+ }
+
+
+ .pub-med-query--article h5 {
+ 	font-weight: bold;
+
+ }
+
+ .pub-med-query--journal-name {
+ 	font-style: italic;
+ 	font-weight: bold;
+ }
+
+ .pub-med-query--journal-authors {
+ 	display: flex;
+ 	flex-wrap: wrap;
+ 	align-items: center;
+ }
+
+ .pub-med-query--journal-authors span {
+ 	padding-right: 10px;
+ }
+
+ .pmq-container {
+ 	max-width: 1200px;
+
+ }
+
+
+ .load-more-button {
+ 	display: none;
+ }
+
+ .load-more-button.visible {
+ 	display: block;
+ }

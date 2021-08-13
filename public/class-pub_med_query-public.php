@@ -102,13 +102,15 @@ class Pub_med_query_Public {
 
 	public function localize_scripts() {
 
-		$options = get_option( 'pmq_example_plugin_options' );
+		$options = get_option( 'pmq_options' );
 
 
 		wp_localize_script( $this->plugin_name, 'values', array(
 			'api_key' => $options['api_key'],
 			'researchers' => $options['researchers'],
 			'categories' => $options['categories'],
+			'load_results' => $options['load_results'],
+			'no_results' => $options['no_results']
 		) );
 
 
